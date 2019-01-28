@@ -46,7 +46,6 @@ predict(wb, type = "quantile", p = 0.5 , newdata = data.frame(1))
 # 70 Percent of patients survive beyond time point...
 predict(wb, type ='quantile', p = 1-0.7, newdata = data.frame(1))
 
-
 # Retrieve survival curve from model probabilities 
 surv <- seq(.99, .01, by = -.01)
 
@@ -76,17 +75,6 @@ t_yes <- predict(wbmod, type = "quantile", p = 1-surv,
 # Take a look at survival curve
 str(t_yes)
 
-# Lung Cancer data
- data('lung')
-# Look at the data set
-str(lung)
-
-# Estimate a Weibull model
-wbmod <- survreg(Surv(time, status) ~ sex, data = lung)
-coef(wbmod)
-#WE can clearly see that, The sexfemale coefficient 
-#is positive which means women tend to survive longer.
-
 ##Weibull visualization data=GBSG2
 # 1.Weibull model
 wbmod <- survreg(Surv(time,cens) ~ horTh + tsize, data = GBSG2)
@@ -95,7 +83,6 @@ wbmod <- survreg(Surv(time,cens) ~ horTh + tsize, data = GBSG2)
 newdat <- expand.grid(
   horTh = levels(GBSG2$horTh),
   tsize = quantile(GBSG2$tsize, probs = c(0.25, 0.50, 0.75)))
-newdat
 
 # 3.Compute survival curves
 surv <- seq(.99, .01, by = -.01)
@@ -145,7 +132,6 @@ surv_long <- melt(surv_wide, id.vars = c("horTh", "dist"),
                   variable.name = "surv_id", value.name = "time")
 
 # Add column for the survival probabilities
-##isme ek error h
 surv_long$surv <- surv[as.numeric(surv_long$surv_id)]
 
 # Add columns upper, lower, std.err, and strata contianing NA values
@@ -154,7 +140,6 @@ surv_long[, c("upper", "lower", "std.err", "strata")] <- NA
 # Plot the survival curves
 ggsurvplot_df(surv_long, surv.geom = geom_line,linetype = 'horTh',
               color = 'dist', legend.title = NULL)
-
 
 # Cox model
 cxmod <- coxph(Surv(time, cens) ~ horTh + tsize, data = GBSG2)
